@@ -1,0 +1,39 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: api-dash 
+  labels:
+    app: api-dash
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: api-dash
+  template:
+    metadata:
+      labels:
+        app: api-dash
+    spec:
+      containers:
+        - image: ghcr.io/duditas-xd/dash-iot/api_dash:ae87c8e66734c108c72c86bed6461937afce2dc8
+          name: api-dash
+          envFrom:
+            - secretRef:
+                name: env-secret-k8s
+          livenessProbe:
+            httpGet:
+              path: /health
+              port: 30055
+            initialDelaySeconds: 10
+            periodSeconds: 5
+            failureThreshold: 3
+          readinessProbe:
+            httpGet:
+              path: /health
+              port: 30055
+            initialDelaySeconds: 5
+            periodSeconds: 5
+            failureThreshold: 3
+      restartPolicy: Always
+      imagePullSecrets:
+        - name: ghcr-login-secret

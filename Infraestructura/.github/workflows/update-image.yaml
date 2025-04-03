@@ -1,0 +1,40 @@
+name: Actualización de imágenes en manifiestos
+on:
+  repository_dispatch:
+    types: [trigger-update-workflow]
+
+jobs:
+  UpdateImage:
+    name: Actualizar imagen en manifiesto
+    runs-on: ubuntu-latest
+    permissions: write-all
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Obtener datos de cliente
+        run: |
+          echo "MANIFEST_PATH=${{ github.event.client_payload.manifest_path }}" >> $GITHUB_ENV
+          echo "IMAGE_TAG=${{ github.event.client_payload.image_tag }}" >> $GITHUB_ENV
+
+      - name: Actualizar imagen en el manifiesto
+        run: |
+          echo "Actualizando $MANIFEST_PATH con la imagen $IMAGE_TAG"
+          sed -i "s|image:.*|image: $IMAGE_TAG|g" $MANIFEST_PATH
+
+      - name: Confirmar cambios
+        run: cat $MANIFEST_PATH | grep "image:"
+
+      - name: Subiendo cambios al repositorio
+        run: |
+          CHANGES=$(git status --porcelain | wc -l)
+          if [ "$CHANGES" -gt "0" ]; then
+            git status
+            git config --global user.name "${{ github.actor }}"
+            git config --global user.email "${{ github.actor }}@users.noreply.github.com"
+            git add --all
+            git commit -m "Update image tag $IMAGE_TAG in $MANIFEST_PATH"
+            git pull --rebase origin main
+            git push https://${{ github.actor }}:${{ secrets.GH_TOKEN }}@github.com/${{ github.repository }}.git HEAD:main
+          else
+            echo "No hay cambios para subir."
+          fi

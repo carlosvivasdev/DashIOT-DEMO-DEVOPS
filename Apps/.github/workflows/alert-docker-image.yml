@@ -1,0 +1,44 @@
+name: Alert-Dash Imagen Docker
+on:
+  push:
+    paths: 
+      - 'alert-service/**'
+
+jobs:
+  Build:
+    name: Builder Image Alert
+    permissions: write-all
+    runs-on: ubuntu-latest
+    steps:
+
+      - name: Archivos de repositorio 
+        uses: actions/checkout@v4
+
+      - name: Credenciales de GitHub Container Register
+        uses: docker/login-action@v3
+        with: 
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GH_TOKEN }}
+
+      - name: Construir y guardar imagen ALERT-DASH
+        uses: docker/build-push-action@v6
+        with:
+          file: ./alert-service/Dockerfile
+          push: true
+          tags: |
+            ghcr.io/${{ github.repository }}/alert_dash:${{ github.sha }}
+            ghcr.io/${{ github.repository }}/alert_dash:latest
+          context: ./alert-service
+
+      - name: Trigger workflow de reposotorio manifest
+        uses: peter-evans/repository-dispatch@v3
+        with:
+          token: ${{ secrets.GH_TOKEN }}
+          repository: ${{ vars.REPO_NAME_MANIFEST }}
+          event-type: trigger-update-workflow
+          client-payload: >
+            {
+              "manifest_path": "./k8s/alert-dash/alert-deploy.yaml",
+              "image_tag": "ghcr.io/${{ github.repository }}/alert_dash:${{ github.sha }}"
+            }   

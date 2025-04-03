@@ -1,0 +1,25 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: alert-dash
+  name: alert-dash
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: alert-dash
+  template:
+    metadata:
+      labels:
+        app: alert-dash
+    spec:
+      containers:
+      - image: ghcr.io/duditas-xd/dash-iot/alert_dash:d2ea97f8cc6677921a00a1f1cc3cb7e2e304a96f
+        name: alert-dash
+        envFrom:
+          - secretRef:
+              name: env-secret-k8s
+      restartPolicy: Always
+      imagePullSecrets:
+        - name: ghcr-login-secret

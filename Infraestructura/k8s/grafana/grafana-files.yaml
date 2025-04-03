@@ -1,0 +1,30 @@
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: grafana-files-pv
+  labels:
+    volume: "grafana-files-pv"
+spec:
+  capacity:
+    storage: 500Mi
+  storageClassName: default
+  accessModes:
+    - ReadWriteOnce
+  hostPath:
+    path: /var/grafana-files
+
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: grafana-files-pvc
+spec:
+  accessModes:
+    - ReadWriteOnce
+  storageClassName: default
+  resources:
+    requests:
+      storage: 500Mi
+  selector:
+    matchLabels:
+      volume: "grafana-files-pv"

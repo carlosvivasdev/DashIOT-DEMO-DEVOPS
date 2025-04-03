@@ -1,0 +1,944 @@
+{
+  "annotations": {
+    "list": [
+      {
+        "builtIn": 1,
+        "datasource": {
+          "type": "grafana",
+          "uid": "-- Grafana --"
+        },
+        "enable": true,
+        "hide": true,
+        "iconColor": "rgba(0, 211, 255, 1)",
+        "name": "Annotations & Alerts",
+        "type": "dashboard"
+      }
+    ]
+  },
+  "editable": true,
+  "fiscalYearStartMonth": 0,
+  "graphTooltip": 0,
+  "id": 5,
+  "links": [],
+  "panels": [
+    {
+      "datasource": {
+        "default": false,
+        "type": "grafana-postgresql-datasource",
+        "uid": "P44368ADAD746BC27"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 3,
+        "w": 3,
+        "x": 0,
+        "y": 0
+      },
+      "id": 1,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "area",
+        "justifyMode": "center",
+        "orientation": "auto",
+        "percentChangeColorMode": "standard",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "showPercentChange": false,
+        "textMode": "value_and_name",
+        "wideLayout": true
+      },
+      "pluginVersion": "11.2.0",
+      "targets": [
+        {
+          "datasource": {
+            "type": "grafana-postgresql-datasource",
+            "uid": "P44368ADAD746BC27"
+          },
+          "editorMode": "code",
+          "format": "table",
+          "rawQuery": true,
+          "rawSql": "select count(id) as \"Sensores\" from $esq.sensores where inactivo = false\r\n",
+          "refId": "A",
+          "sql": {
+            "columns": [
+              {
+                "parameters": [],
+                "type": "function"
+              }
+            ],
+            "groupBy": [
+              {
+                "property": {
+                  "type": "string"
+                },
+                "type": "groupBy"
+              }
+            ],
+            "limit": 50
+          }
+        }
+      ],
+      "type": "stat"
+    },
+    {
+      "datasource": {
+        "default": false,
+        "type": "grafana-postgresql-datasource",
+        "uid": "P44368ADAD746BC27"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 1
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 3,
+        "w": 3,
+        "x": 3,
+        "y": 0
+      },
+      "id": 2,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "area",
+        "justifyMode": "center",
+        "orientation": "auto",
+        "percentChangeColorMode": "standard",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "showPercentChange": false,
+        "textMode": "value_and_name",
+        "wideLayout": true
+      },
+      "pluginVersion": "11.2.0",
+      "targets": [
+        {
+          "datasource": {
+            "type": "grafana-postgresql-datasource",
+            "uid": "P44368ADAD746BC27"
+          },
+          "editorMode": "code",
+          "format": "table",
+          "rawQuery": true,
+          "rawSql": "select count(id) as \"Sens. inactivos\" from $esq.sensores where inactivo = true",
+          "refId": "A",
+          "sql": {
+            "columns": [
+              {
+                "parameters": [],
+                "type": "function"
+              }
+            ],
+            "groupBy": [
+              {
+                "property": {
+                  "type": "string"
+                },
+                "type": "groupBy"
+              }
+            ],
+            "limit": 50
+          }
+        }
+      ],
+      "type": "stat"
+    },
+    {
+      "datasource": {
+        "type": "grafana-postgresql-datasource",
+        "uid": "P44368ADAD746BC27"
+      },
+      "gridPos": {
+        "h": 3,
+        "w": 10,
+        "x": 6,
+        "y": 0
+      },
+      "id": 28,
+      "options": {
+        "code": {
+          "language": "plaintext",
+          "showLineNumbers": false,
+          "showMiniMap": false
+        },
+        "content": "<style>\r\n  .icon-card-container {\r\n    display: flex; \r\n    height: 100%;\r\n    flex-wrap: wrap;\r\n    gap: 8px; \r\n  }\r\n\r\n  .icon-card {\r\n    color: currentColor;\r\n    text-align: center;\r\n    position: relative;\r\n    border: rgba(204, 204, 220, 0.12) 1px solid;\r\n\r\n    min-width: 100px;\r\n    padding: 8px;\r\n\r\n    display: flex;\r\n    flex-grow: 1;\r\n    flex-direction: column;\r\n    align-items: center;\r\n    justify-content: center;\r\n    gap: 8px;\r\n\r\n    & i {\r\n      font-size: 1.5rem;\r\n    }\r\n\r\n    & .titulo {\r\n      font-size: 1rem;\r\n      font-weight: 500;\r\n      padding: 0;\r\n      margin: 0;\r\n    }\r\n  }\r\n</style>\r\n\r\n<!-- <h2 title=\"Paneles\" class=\"css-4sw7w0\" style=\"margin-bottom:8px\">Paneles</h2> -->\r\n<div class=\"icon-card-container\">\r\n  <a href=\"/d/adxtqhy3gz4zkb\" class=\"icon-card\" style=\"color:currentColor\">\r\n    <i class=\"fa fa-building\"></i>\r\n    <h2 class=\"titulo\">Detalles de Area</h2>\r\n  </a>\r\n  <a href=\"/d/de2c6h7t1ms3rd\" class=\"icon-card\" style=\"color:currentColor\">\r\n    <i class=\"fa fa-list-ul\"></i>\r\n    <h2 class=\"titulo\">Lista de Sensores</h2>\r\n  </a>\r\n  <a href=\"/d/ddxwcck13f280b\" class=\"icon-card\" style=\"color:currentColor\">\r\n    <i class=\"fa fa-circle\"></i>\r\n    <h2 class=\"titulo\">Detalles de Sensor</h2>\r\n  </a>\r\n</div>",
+        "mode": "html"
+      },
+      "pluginVersion": "11.2.0",
+      "type": "text"
+    },
+    {
+      "datasource": {
+        "default": false,
+        "type": "grafana-postgresql-datasource",
+        "uid": "P44368ADAD746BC27"
+      },
+      "description": "",
+      "fieldConfig": {
+        "defaults": {
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 9,
+        "w": 8,
+        "x": 16,
+        "y": 0
+      },
+      "id": 34,
+      "options": {
+        "afterRender": "const alertas = context.data[0]\r\n\r\nconst lastAlertSaved = localStorage.getItem('ultima-alerta');\r\n\r\nif (!lastAlertSaved || lastAlertSaved === '') {\r\n  localStorage.setItem('ultima-alerta', alertas[0].id_registro)\r\n  return\r\n}\r\n\r\nif (parseInt(lastAlertSaved) !== alertas[0].id_registro) {\r\n  var audio = new Audio('http://localhost:3030/sound/notification.mp3');\r\n  audio.play();\r\n}\r\n\r\nlocalStorage.setItem('ultima-alerta', alertas[0].id_registro)",
+        "content": "\n{{!-- Verificar si hay alertas --}}\n{{#if data.[0]}} \n\n{{#each data.[0]}}\n  <div class=\"item\">\n    <div class=\"icono-container\">\n      {{#if estado_alerta}}\n        <i class=\"fa fa-exclamation-triangle\" style=\"color:rgb(242, 73, 92);color:{{colorTipoAlerta tipo_alerta estado_alerta}};\"></i>\n      {{else}}\n        <i class=\"fa fa-check-square\" style=\"color:rgb(115, 191, 105)\"></i>\n      {{/if}}\n    </div>\n    <div class=\"contenido\">\n      <div class=\"titulo\">\n        <div class=\"titulo-texto\">\n          {{!-- <a href=\"d/ddxwcck13f280b/sensor?orgId=1&var-sensor={{id_sensor}}\"> --}}\n            {{#if nombre_bodega}}{{nombre_bodega}} - {{/if}}\n            {{nombre_sensor}}\n          {{!-- </a> --}}\n        </div>\n      </div>\n      <div class=\"texto\">\n        {{#if (esMedicion tipo_alerta)}}\n          <span style=\"color:{{colorTipoAlerta tipo_alerta estado_alerta}};\">\n            {{capitalize tipo_alerta}}\n          </span>\n          {{capitalize tipo_medicion}} a {{valor}} {{unidad}}\n        {{/if}}\n        {{#if (eq tipo_alerta \"bateria_baja\")}}\n          <span style=\"color:{{colorTipoAlerta tipo_alerta estado_alerta}};\">\n            Batería\n          </span>\n          a {{valor}}%\n        {{/if}}\n        {{#if (eq tipo_alerta \"inactividad\")}}\n          <span style=\"color:{{colorTipoAlerta tipo_alerta estado_alerta}};\">\n            Inactividad\n          </span>\n          {{#if estado_alerta}}\n            de {{valor}} minutos\n          {{/if}}\n        {{/if}}\n\n        {{#if estado_alerta}}{{else}} - Normalizada{{/if}}\n      </div>\n    </div>\n    {{!-- <div>a</div> --}}\n    <div class=\"fecha\">\n      <div>\n        {{date fecha \"hh:mm A\"}}\n      </div>\n      <div>\n        {{date fecha \"DD/MM/YYYY\"}}\n      </div>\n    </div>\n  </div>\n{{/each}}\n\n{{else}}\n<div style=\"font-size: 2rem;font-weight: 500;text-align: center;margin-top:20px;\">\n  No hay Alertas\n</div>\n{{/if}}\n\n\n\n",
+        "contentPartials": [],
+        "defaultContent": "The query didn't return any results.",
+        "editor": {
+          "format": "auto",
+          "language": "handlebars"
+        },
+        "editors": [
+          "styles",
+          "helpers",
+          "afterRender"
+        ],
+        "externalStyles": [],
+        "helpers": "context.handlebars.registerHelper(\"myicono\", (text) =>\r\n  'hola'\r\n);\r\n\r\ncontext.handlebars.registerHelper(\"esMedicion\", (tipo_alerta) =>\r\n  (tipo_alerta === 'alarma' || tipo_alerta === 'advertencia')\r\n);\r\n\r\ncontext.handlebars.registerHelper(\"capitalize\", (string) =>\r\n  string.charAt(0).toUpperCase() + string.slice(1)\r\n);\r\ncontext.handlebars.registerHelper(\"colorTipoAlerta\", (tipo_alerta, estado_alerta) => {\r\n  if (estado_alerta === false) return 'rgb(115, 191, 105)'\r\n  if (tipo_alerta === 'alarma') return 'rgb(242, 73, 92)'\r\n  if (tipo_alerta === 'advertencia') return 'rgb(250, 222, 43)'\r\n  // if (tipo_alerta === 'bateria_baja') return 'rgb(86, 148, 242)'\r\n  if (tipo_alerta === 'bateria_baja') return 'rgb(250, 222, 43)'\r\n  // if (tipo_alerta === 'inactividad') return 'rgb(184, 118, 217)'\r\n  if (tipo_alerta === 'inactividad') return 'rgb(242, 73, 92)'\r\n}\r\n);\r\n",
+        "renderMode": "data",
+        "styles": ".item {\r\n  display: flex;\r\n  // align-items: center;\r\n  padding: 6px;\r\n  border-bottom: 1px solid rgba(204, 204, 220, 0.12);\r\n  gap: 8px;\r\n}\r\n\r\n.icono-container {\r\n  width:20px;\r\n  margin-top:6px;\r\n  display:flex;\r\n  justify-content:center;\r\n}\r\n\r\n.contenido {\r\n  flex-grow: 1;\r\n}\r\n\r\n.titulo {\r\n  font-weight: 600;\r\n  display: flex;\r\n  align-items: center;\r\n}\r\n\r\n.titulo-texto {\r\n  // margin-left: 16px;\r\n}\r\n\r\n.titulo-texto > a {\r\n  color:currentColor;\r\n}\r\n\r\n.icono {\r\n  // color: rgba(204, 204, 220, 0.65);\r\n  // fill: rgba(204, 204, 220, 0.65);\r\n\r\n\r\n}\r\n\r\n.fecha {\r\n  text-align: right;\r\n  font-size: smaller;\r\n}",
+        "wrap": false
+      },
+      "pluginVersion": "5.4.0",
+      "targets": [
+        {
+          "datasource": {
+            "type": "grafana-postgresql-datasource",
+            "uid": "P44368ADAD746BC27"
+          },
+          "editorMode": "code",
+          "format": "table",
+          "rawQuery": true,
+          "rawSql": "select * from esq_dash_iot.vmostraralertas\r\norder by fecha desc, id_registro desc\r\nlimit 50",
+          "refId": "A",
+          "sql": {
+            "columns": [
+              {
+                "parameters": [],
+                "type": "function"
+              }
+            ],
+            "groupBy": [
+              {
+                "property": {
+                  "type": "string"
+                },
+                "type": "groupBy"
+              }
+            ],
+            "limit": 50
+          }
+        },
+        {
+          "datasource": {
+            "type": "grafana-postgresql-datasource",
+            "uid": "P44368ADAD746BC27"
+          },
+          "editorMode": "code",
+          "format": "table",
+          "hide": false,
+          "rawQuery": true,
+          "rawSql": "values ('')",
+          "refId": "B",
+          "sql": {
+            "columns": [
+              {
+                "parameters": [],
+                "type": "function"
+              }
+            ],
+            "groupBy": [
+              {
+                "property": {
+                  "type": "string"
+                },
+                "type": "groupBy"
+              }
+            ],
+            "limit": 50
+          }
+        }
+      ],
+      "title": "Historial de Alertas",
+      "type": "marcusolsson-dynamictext-panel"
+    },
+    {
+      "datasource": {
+        "default": false,
+        "type": "grafana-postgresql-datasource",
+        "uid": "P44368ADAD746BC27"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "custom": {
+            "align": "center",
+            "cellOptions": {
+              "type": "auto"
+            },
+            "inspect": false,
+            "minWidth": 80
+          },
+          "mappings": [],
+          "noValue": "No hay bodegas establecidas",
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              }
+            ]
+          }
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Area"
+            },
+            "properties": [
+              {
+                "id": "links",
+                "value": [
+                  {
+                    "targetBlank": false,
+                    "title": "Ir al dashboard",
+                    "url": "/d/adxtqhy3gz4zkb/bodega?orgId=1&var-bodega=${__data.fields.id}"
+                  }
+                ]
+              },
+              {
+                "id": "custom.align",
+                "value": "auto"
+              },
+              {
+                "id": "custom.minWidth"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "id"
+            },
+            "properties": [
+              {
+                "id": "custom.hidden",
+                "value": true
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byType",
+              "options": "number"
+            },
+            "properties": [
+              {
+                "id": "custom.width",
+                "value": 95
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Normal"
+            },
+            "properties": [
+              {
+                "id": "custom.cellOptions",
+                "value": {
+                  "applyToRow": false,
+                  "type": "color-background"
+                }
+              },
+              {
+                "id": "mappings",
+                "value": [
+                  {
+                    "options": {
+                      "0": {
+                        "color": "transparent",
+                        "index": 1
+                      }
+                    },
+                    "type": "value"
+                  },
+                  {
+                    "options": {
+                      "from": 1,
+                      "result": {
+                        "color": "green",
+                        "index": 0
+                      },
+                      "to": 999
+                    },
+                    "type": "range"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Advertencia"
+            },
+            "properties": [
+              {
+                "id": "custom.cellOptions",
+                "value": {
+                  "applyToRow": false,
+                  "type": "color-background"
+                }
+              },
+              {
+                "id": "mappings",
+                "value": [
+                  {
+                    "options": {
+                      "0": {
+                        "color": "transparent",
+                        "index": 1
+                      }
+                    },
+                    "type": "value"
+                  },
+                  {
+                    "options": {
+                      "from": 1,
+                      "result": {
+                        "color": "yellow",
+                        "index": 0
+                      },
+                      "to": 999
+                    },
+                    "type": "range"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Alarma"
+            },
+            "properties": [
+              {
+                "id": "custom.cellOptions",
+                "value": {
+                  "applyToRow": false,
+                  "type": "color-background"
+                }
+              },
+              {
+                "id": "mappings",
+                "value": [
+                  {
+                    "options": {
+                      "0": {
+                        "color": "transparent",
+                        "index": 1
+                      }
+                    },
+                    "type": "value"
+                  },
+                  {
+                    "options": {
+                      "from": 1,
+                      "result": {
+                        "color": "red",
+                        "index": 0
+                      },
+                      "to": 999
+                    },
+                    "type": "range"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Sin Alerta"
+            },
+            "properties": [
+              {
+                "id": "custom.cellOptions",
+                "value": {
+                  "type": "color-background"
+                }
+              },
+              {
+                "id": "mappings",
+                "value": [
+                  {
+                    "options": {
+                      "0": {
+                        "color": "transparent",
+                        "index": 0
+                      }
+                    },
+                    "type": "value"
+                  },
+                  {
+                    "options": {
+                      "from": 1,
+                      "result": {
+                        "color": "orange",
+                        "index": 1
+                      },
+                      "to": 999
+                    },
+                    "type": "range"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "S. Inactivos"
+            },
+            "properties": [
+              {
+                "id": "custom.cellOptions",
+                "value": {
+                  "mode": "gradient",
+                  "type": "color-background"
+                }
+              },
+              {
+                "id": "mappings",
+                "value": [
+                  {
+                    "options": {
+                      "0": {
+                        "color": "transparent",
+                        "index": 0
+                      }
+                    },
+                    "type": "value"
+                  },
+                  {
+                    "options": {
+                      "from": 1,
+                      "result": {
+                        "color": "red",
+                        "index": 1
+                      },
+                      "to": 999
+                    },
+                    "type": "range"
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "h": 6,
+        "w": 16,
+        "x": 0,
+        "y": 3
+      },
+      "id": 17,
+      "options": {
+        "cellHeight": "sm",
+        "footer": {
+          "countRows": false,
+          "enablePagination": false,
+          "fields": "",
+          "reducer": [
+            "sum"
+          ],
+          "show": false
+        },
+        "showHeader": true,
+        "sortBy": []
+      },
+      "pluginVersion": "11.2.0",
+      "targets": [
+        {
+          "datasource": {
+            "type": "grafana-postgresql-datasource",
+            "uid": "P44368ADAD746BC27"
+          },
+          "editorMode": "code",
+          "format": "table",
+          "rawQuery": true,
+          "rawSql": "select a.id, \r\na.nombre as \"Area\",\r\n( select count(*) from $esq.sensores where id_area = a.id and inactivo = false ) as \"S. Activos\",\r\n( select count(*) from $esq.sensores where id_area = a.id and inactivo = true ) as \"S. Inactivos\",\r\n( select $esq.getNumeroSensoresAlertaArea(a.id::text, '0', '${__from:date}', '${__to:date}') ) as \"Sin Alerta\",\r\n( select $esq.getNumeroSensoresAlertaArea(a.id::text, '1', '${__from:date}', '${__to:date}') ) as \"Normal\", \r\n( select $esq.getNumeroSensoresAlertaArea(a.id::text, '2', '${__from:date}', '${__to:date}') ) as \"Advertencia\",\r\n( select $esq.getNumeroSensoresAlertaArea(a.id::text, '3', '${__from:date}', '${__to:date}') ) as \"Alarma\" \r\nfrom $esq.areas a\r\n  left join $esq.sensores s on s.id_area = a.id\r\ngroup by a.id\r\norder by a.orden",
+          "refId": "A",
+          "sql": {
+            "columns": [
+              {
+                "parameters": [],
+                "type": "function"
+              }
+            ],
+            "groupBy": [
+              {
+                "property": {
+                  "type": "string"
+                },
+                "type": "groupBy"
+              }
+            ],
+            "limit": 50
+          }
+        }
+      ],
+      "type": "table"
+    },
+    {
+      "collapsed": false,
+      "gridPos": {
+        "h": 1,
+        "w": 24,
+        "x": 0,
+        "y": 9
+      },
+      "id": 5,
+      "panels": [],
+      "title": "Sensores",
+      "type": "row"
+    },
+    {
+      "datasource": {
+        "default": false,
+        "type": "grafana-postgresql-datasource",
+        "uid": "P44368ADAD746BC27"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "fieldMinMax": true,
+          "mappings": [
+            {
+              "options": {
+                "-999": {
+                  "color": "red",
+                  "index": 0,
+                  "text": "Inactivo"
+                }
+              },
+              "type": "value"
+            }
+          ],
+          "noValue": "Sin Datos",
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "orange",
+                "value": null
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 5,
+        "w": 6,
+        "x": 0,
+        "y": 10
+      },
+      "id": 3,
+      "links": [
+        {
+          "title": "Dashboard sensor",
+          "url": "d/ddxwcck13f280b/sensor?orgId=1&${sensor:queryparam}"
+        }
+      ],
+      "maxPerRow": 4,
+      "options": {
+        "minVizHeight": 75,
+        "minVizWidth": 205,
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "showThresholdLabels": false,
+        "showThresholdMarkers": true,
+        "sizing": "auto"
+      },
+      "pluginVersion": "11.2.0",
+      "repeat": "sensor",
+      "repeatDirection": "h",
+      "targets": [
+        {
+          "datasource": {
+            "type": "grafana-postgresql-datasource",
+            "uid": "P44368ADAD746BC27"
+          },
+          "editorMode": "code",
+          "format": "time_series",
+          "hide": false,
+          "rawQuery": true,
+          "rawSql": "with sensor_gauge as ( \r\n  select  *\r\n  from $esq.mediciones m\r\n    inner join $esq.sensores s on s.id = m.id_sensor \r\n  where $__timeFilter(tiempo) and id_sensor in ($sensor) order by tiempo\r\n) \r\nselect $__timeGroup(tiempo, $__interval), INITCAP(tipo_medicion), valor as \" \" \r\nfrom sensor_gauge where inactivo = false\r\nUNION ALL\r\nSELECT $__to, 'Inactivo', -999\r\nWHERE EXISTS (\r\n    SELECT id FROM $esq.sensores where id in ($sensor) and inactivo = true\r\n)",
+          "refId": "A",
+          "sql": {
+            "columns": [
+              {
+                "parameters": [],
+                "type": "function"
+              }
+            ],
+            "groupBy": [
+              {
+                "property": {
+                  "type": "string"
+                },
+                "type": "groupBy"
+              }
+            ],
+            "limit": 50
+          }
+        },
+        {
+          "datasource": {
+            "type": "grafana-postgresql-datasource",
+            "uid": "P44368ADAD746BC27"
+          },
+          "editorMode": "code",
+          "format": "table",
+          "hide": false,
+          "rawQuery": true,
+          "rawSql": "select advertencia, alarma, min, max, tipo_medicion \r\nfrom esq_dash_iot.limites where tipo_medicion = 'humedad' and id_sensor in ($sensor)",
+          "refId": "config_humedad",
+          "sql": {
+            "columns": [
+              {
+                "parameters": [],
+                "type": "function"
+              }
+            ],
+            "groupBy": [
+              {
+                "property": {
+                  "type": "string"
+                },
+                "type": "groupBy"
+              }
+            ],
+            "limit": 50
+          }
+        },
+        {
+          "datasource": {
+            "type": "grafana-postgresql-datasource",
+            "uid": "P44368ADAD746BC27"
+          },
+          "editorMode": "code",
+          "format": "table",
+          "hide": false,
+          "rawQuery": true,
+          "rawSql": "select advertencia, alarma, min, max, tipo_medicion \r\nfrom esq_dash_iot.limites where tipo_medicion = 'temperatura' and id_sensor in ($sensor)",
+          "refId": "config_temp",
+          "sql": {
+            "columns": [
+              {
+                "parameters": [],
+                "type": "function"
+              }
+            ],
+            "groupBy": [
+              {
+                "property": {
+                  "type": "string"
+                },
+                "type": "groupBy"
+              }
+            ],
+            "limit": 50
+          }
+        }
+      ],
+      "title": "$sensor",
+      "transformations": [
+        {
+          "id": "configFromData",
+          "options": {
+            "applyTo": {
+              "id": "byName",
+              "options": "  Humedad"
+            },
+            "configRefId": "config_humedad",
+            "mappings": [
+              {
+                "fieldName": "advertencia",
+                "handlerArguments": {
+                  "threshold": {
+                    "color": "yellow"
+                  }
+                },
+                "handlerKey": "threshold1"
+              },
+              {
+                "fieldName": "alarma",
+                "handlerKey": "threshold1"
+              }
+            ]
+          }
+        },
+        {
+          "id": "configFromData",
+          "options": {
+            "applyTo": {
+              "id": "byName",
+              "options": "  Temperatura"
+            },
+            "configRefId": "config_temp",
+            "mappings": [
+              {
+                "fieldName": "advertencia",
+                "handlerArguments": {
+                  "threshold": {
+                    "color": "yellow"
+                  }
+                },
+                "handlerKey": "threshold1"
+              },
+              {
+                "fieldName": "alarma",
+                "handlerKey": "threshold1"
+              }
+            ]
+          }
+        }
+      ],
+      "type": "gauge"
+    }
+  ],
+  "refresh": "1m",
+  "schemaVersion": 39,
+  "tags": [],
+  "templating": {
+    "list": [
+      {
+        "current": {
+          "selected": false,
+          "text": "All",
+          "value": "$__all"
+        },
+        "datasource": {
+          "type": "grafana-postgresql-datasource",
+          "uid": "P44368ADAD746BC27"
+        },
+        "definition": "select id __value, nombre_sensor __text from esq_dash_iot.sensores order by id_area, id",
+        "hide": 2,
+        "includeAll": true,
+        "label": "Sensor",
+        "multi": false,
+        "name": "sensor",
+        "options": [],
+        "query": "select id __value, nombre_sensor __text from esq_dash_iot.sensores order by id_area, id",
+        "refresh": 1,
+        "regex": "",
+        "skipUrlSync": false,
+        "sort": 0,
+        "type": "query"
+      },
+      {
+        "hide": 2,
+        "name": "esq",
+        "query": "esq_dash_iot",
+        "skipUrlSync": false,
+        "type": "constant"
+      }
+    ]
+  },
+  "time": {
+    "from": "now-1h",
+    "to": "now"
+  },
+  "timepicker": {},
+  "timezone": "browser",
+  "title": "Admin",
+  "uid": "cdwt3kr5vuz28c",
+  "version": 7,
+  "weekStart": ""
+}

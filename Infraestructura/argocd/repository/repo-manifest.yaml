@@ -1,0 +1,11 @@
+apiVersion: v1
+kind: Secret
+metadata:
+  name: repo-manifest
+  namespace: argocd
+  labels:
+    argocd.argoproj.io/secret-type: repository
+stringData:
+  name: repo-manifest
+  url: https://github.com/duditas-xd/dash-iot-manifest.git
+  password: ${REPO_TOKEN}

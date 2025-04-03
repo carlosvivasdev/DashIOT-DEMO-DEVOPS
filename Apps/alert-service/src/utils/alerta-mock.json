@@ -1,0 +1,30 @@
+[
+  {
+    "id_registro": 1,
+    "tipo_alerta": "inactividad",
+    "estado_alerta": true,
+    "fecha": "2024-11-23T08:37:57.478409-05:00",
+    "id_sensor": 3,
+    "nombre_sensor": "BDS Refrigerador",
+    "tipo_medicion": null,
+    "unidad": null,
+    "limite": 60,
+    "valor": 60,
+    "id_area": 2,
+    "nombre_area": "Bodega Dispositivos y Suministros",
+    "notificaciones": [
+      {
+        "medio": "email",
+        "ids": [
+          "admin@hep.ec"
+        ]
+      },
+      {
+        "medio": "telegram",
+        "ids": [
+          "-4249665440"
+        ]
+      }
+    ]
+  }
+]

@@ -1,0 +1,80 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: emqx-svc
+  labels:
+    app: emqx
+spec:
+  type: NodePort  
+  ports:
+  - port: 1883
+    targetPort: 1883
+    protocol: TCP
+    name: mqtt
+    nodePort: 31883
+  - port: 8083
+    targetPort: 8083
+    protocol: TCP
+    name: http
+    nodePort: 32083
+  - port: 8084
+    targetPort: 8084
+    protocol: TCP
+    name: ws
+    nodePort: 32084
+  - port: 8883
+    targetPort: 8883
+    protocol: TCP
+    name: mqtts
+    nodePort: 31884
+  - port: 18083
+    targetPort: 18083
+    protocol: TCP
+    name: dashboard
+    nodePort: 31885
+  selector:
+    app: emqx
+
+
+
+
+
+
+
+
+
+
+
+
+
+# apiVersion: v1
+# kind: Service
+# metadata:
+#   name: emqx-svc
+#   labels:
+#     app: emqx
+# spec:
+#   type: ClusterIP  
+#   ports:
+#   - port: 1883
+#     targetPort: 1883
+#     protocol: TCP
+#     name: mqtt
+#   - port: 8083
+#     targetPort: 8083
+#     protocol: TCP
+#     name: http
+#   - port: 8084
+#     targetPort: 8084
+#     protocol: TCP
+#     name: ws
+#   - port: 8883
+#     targetPort: 8883
+#     protocol: TCP
+#     name: mqtts
+#   - port: 18083
+#     targetPort: 18083
+#     protocol: TCP
+#     name: dashboard
+#   selector:
+#     app: emqx

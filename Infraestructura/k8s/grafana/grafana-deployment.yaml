@@ -1,0 +1,34 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: grafana
+  labels:
+    app: grafana
+spec:
+  replicas: 1  
+  selector:
+    matchLabels:
+      app: grafana
+  template:
+    metadata:
+      labels:
+        app: grafana
+    spec:
+      containers:
+      - image: ghcr.io/duditas-xd/dash-iot/grafana_dash:af5c9d5b97eb8df471a3ec67bd686e8585ea04bf
+        name: grafana
+        securityContext:
+          runAsUser: 0
+        volumeMounts:
+          - name: grafana-storage
+            mountPath: /var/lib/grafana/
+        envFrom:
+        - secretRef:
+            name: env-secret-k8s
+      imagePullSecrets:
+        - name: ghcr-login-secret
+      volumes:
+      - name: grafana-storage
+        persistentVolumeClaim:
+          claimName: grafana-data-pvc
+      restartPolicy: Always

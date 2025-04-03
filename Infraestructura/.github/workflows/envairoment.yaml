@@ -1,0 +1,68 @@
+name: Variables de entorno K8S
+on:
+  repository_dispatch:
+    types: [trigger-update-variables]
+  push:
+    paths:
+      - '.github/workflows/envairoment.yaml'
+
+jobs:
+  Variables_Entorno:
+    name: Definir las varaibles de entorno
+    runs-on: ubuntu-latest
+    steps:
+
+      - name: Conexión a kubernetes
+        run: |
+          mkdir -p ~/.kube
+          echo "${{ secrets.K8S_KUBECONFIG }}" | base64 --decode > ~/.kube/config
+
+      - name: Crear nombre de espacio en kubernetes
+        run: kubectl get namespace "${{ vars.K8S_NAMESPACE }}" || kubectl create namespace "${{ vars.K8S_NAMESPACE }}"
+
+      - name: Agregar variables de entorno a K8s
+        run: |
+          kubectl delete secret env-secret-k8s -n "${{ vars.K8S_NAMESPACE }}" --ignore-not-found
+          kubectl create secret generic env-secret-k8s -n "${{ vars.K8S_NAMESPACE }}" \
+            --from-literal=API_VERSION="${{ vars.API_VERSION }}"\
+            --from-literal=API_PROTOCOL="${{ vars.API_PROTOCOL }}"\
+            --from-literal=API_HOST="${{ vars.API_HOST }}"\
+            --from-literal=API_PORT="${{ vars.API_PORT }}"\
+            --from-literal=API_MQTT_TOPIC="${{ vars.API_MQTT_TOPIC }}"\
+            --from-literal=API_INTERVALO_MIN="${{ vars.API_INTERVALO_MIN }}"\
+            \
+            --from-literal=ALERT_SERVICE_VERSION="${{ vars.ALERT_SERVICE_VERSION }}"\
+            --from-literal=ALERT_SERVICE_PROTOCOL="${{ vars.ALERT_SERVICE_PROTOCOL }}"\
+            --from-literal=ALERT_SERVICE_HOST="${{ vars.ALERT_SERVICE_HOST }}"\
+            --from-literal=ALERT_SERVICE_PORT="${{ vars.ALERT_SERVICE_PORT }}"\
+            \
+            --from-literal=TELEGRAM_BOT_TOKEN="6729961289:AAHTzaU829NcR_Bc4U33BZWtHzUrAuRd2v0"\
+            \
+            --from-literal=POSTGRES_USER="${{ vars.POSTGRES_USER }}" \
+            --from-literal=POSTGRES_HOST="${{ vars.POSTGRES_HOST }}" \
+            --from-literal=POSTGRES_DB="${{ vars.POSTGRES_DB }}"\
+            --from-literal=POSTGRES_PASSWORD="${{ secrets.POSTGRES_PASSWORD }}" \
+            --from-literal=POSTGRES_PORT="${{ vars.POSTGRES_PORT }}" \
+            \
+            --from-literal=BROKER_PROTOCOL="${{ vars.BROKER_PROTOCOL }}" \
+            --from-literal=BROKER_HOST="${{ vars.BROKER_HOST }}" \
+            --from-literal=BROKER_PORT="${{ vars.BROKER_PORT }}"\
+            --from-literal=BROKER_USER="${{ vars.BROKER_USER }}" \
+            --from-literal=BROKER_PASS="${{ secrets.BROKER_PASS }}"\
+            \
+            --from-literal=GF_INSTALL_PLUGINS="volkovlabs-form-panel,marcusolsson-dynamictext-panel,volkovlabs-table-panel" \
+            --from-literal=GF_PANELS_DISABLE_SANITIZE_HTML="true" 
+
+      - name: Reiniciar deployments en el namespace
+        run: |
+          if kubectl get deployment api-dash -n "${{ vars.K8S_NAMESPACE }}" > /dev/null 2>&1; then
+            kubectl rollout restart deployment api-dash -n "${{ vars.K8S_NAMESPACE }}"
+          else
+            echo "Deployment api-dash no encontrado. Saltando reinicio."
+          fi
+
+          if kubectl get deployment alert-dash -n "${{ vars.K8S_NAMESPACE }}" > /dev/null 2>&1; then
+            kubectl rollout restart deployment alert-dash -n "${{ vars.K8S_NAMESPACE }}"
+          else
+            echo "Deployment alert-dash no encontrado. Saltando reinicio."
+          fi

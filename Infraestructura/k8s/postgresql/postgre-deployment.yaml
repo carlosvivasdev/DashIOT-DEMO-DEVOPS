@@ -1,0 +1,35 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: postgres
+  labels:
+    app: postgres
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: postgres
+  template:
+    metadata:
+      labels:
+        app: postgres
+    spec:
+      containers:
+      - image: ghcr.io/duditas-xd/dash-iot/postgres_dash:55439d6d221adcf7e3d47408d94f1cfba2937761
+        name: postgres
+        ports:
+        - containerPort: 5432
+          name: port
+        volumeMounts:
+          - name: postgres-data
+            mountPath: /var/lib/postgresql/data
+        envFrom:
+          - secretRef:
+              name: env-secret-k8s
+      imagePullSecrets:
+        - name: ghcr-login-secret
+      volumes:
+      - name: postgres-data
+        persistentVolumeClaim:
+          claimName: postgres-data-pvc
+      restartPolicy: Always

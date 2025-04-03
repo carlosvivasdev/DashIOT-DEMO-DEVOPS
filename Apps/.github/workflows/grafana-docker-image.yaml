@@ -1,0 +1,44 @@
+name: Grafana-Dash Imagen Docker
+on:
+  push:
+    paths: 
+      - 'grafana/**'
+
+jobs:
+  Build_grafana_Image:
+    name: Construir imagen de grafana
+    permissions: write-all
+    runs-on: ubuntu-latest
+    steps:
+
+      - name: Archivos de repositorio 
+        uses: actions/checkout@v4
+
+      - name: Credenciales de GitHub Container Register
+        uses: docker/login-action@v3
+        with: 
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GH_TOKEN }}
+
+      - name: Construir y guardar imagen GRAFANA-DASH
+        uses: docker/build-push-action@v6
+        with:
+          file: ./grafana/Dockerfile
+          push: true
+          tags: |
+            ghcr.io/${{ github.repository }}/grafana_dash:${{ github.sha }}
+            ghcr.io/${{ github.repository }}/grafana_dash:latest
+          context: ./grafana
+
+      - name: Trigger workflow de reposotorio manifest
+        uses: peter-evans/repository-dispatch@v3
+        with:
+          token: ${{ secrets.GH_TOKEN }}
+          repository: ${{ vars.REPO_NAME_MANIFEST }}
+          event-type: trigger-update-workflow
+          client-payload: >
+            {
+              "manifest_path": "./k8s/grafana/grafana-deployment.yaml",
+              "image_tag": "ghcr.io/${{ github.repository }}/grafana_dash:${{ github.sha }}"
+            }

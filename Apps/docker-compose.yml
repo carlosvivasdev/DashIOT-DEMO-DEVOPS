@@ -1,0 +1,110 @@
+services:
+  postgres:
+    image: postgres:14
+    container_name: postgres-dash-iot
+    environment:
+      PGUSER: $POSTGRES_USER
+      POSTGRES_USER: $POSTGRES_USER
+      POSTGRES_PASSWORD: $POSTGRES_PASSWORD
+      POSTGRES_DB: $POSTGRES_DB
+    ports:
+      - $POSTGRES_PORT:$POSTGRES_PORT
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+      - ./postgres/init/:/docker-entrypoint-initdb.d/:ro
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready" ]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+    networks:
+      - dash-iot-network
+
+  alert-service:
+    build: ./alert-service
+    image: alert-service-dash-iot:$ALERT_SERVICE_VERSION
+    container_name: alert-service-dash-iot
+    ports:
+      - $ALERT_SERVICE_PORT:$ALERT_SERVICE_PORT
+    env_file:
+      - .env
+    depends_on:
+      postgres:
+        condition: service_healthy
+      emqx:
+        condition: service_healthy
+    volumes:
+      - ./alert-service/src:/usr/src/alert-service/src:ro
+    networks:
+      - dash-iot-network
+
+  api:
+    build: ./api
+    image: api-dash-iot:$API_VERSION
+    container_name: api-dash-iot
+    ports:
+      - $API_PORT:$API_PORT
+    env_file:
+      - .env
+    depends_on:
+      postgres:
+        condition: service_healthy
+      emqx:
+        condition: service_healthy
+    volumes:
+      - ./api/src:/usr/src/api-dash-iot/src:ro
+      - ./api/public/sound:/usr/src/api-dash-iot/public/sound
+    networks:
+      - dash-iot-network
+
+  grafana:
+    image: grafana/grafana-oss:11.2.0
+    container_name: grafana-dash-iot
+    restart: unless-stopped
+    env_file:
+      - .env
+    environment:
+      - GF_INSTALL_PLUGINS=volkovlabs-form-panel,marcusolsson-dynamictext-panel,volkovlabs-table-panel
+      - GF_PANELS_DISABLE_SANITIZE_HTML=true
+    ports:
+      - 3000:3000
+    depends_on:
+      postgres:
+        condition: service_healthy
+    volumes:
+      - grafana-storage:/var/lib/grafana
+      - ./grafana/dashboards/:/etc/grafana/provisioning/dashboards
+      - ./grafana/datasources/:/etc/grafana/provisioning/datasources
+    networks:
+      - dash-iot-network
+
+  emqx:
+    image: emqx:5.8.0
+    container_name: emqx-dash-iot
+    healthcheck:
+      test: [ "CMD", "/opt/emqx/bin/emqx", "ctl", "status" ]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+    networks:
+      - dash-iot-network
+    ports:
+      - 1883:1883
+      # - 8083:8083
+      # - 8084:8084
+      # - 8883:8883
+      - 18083:18083
+    volumes:
+      - emqx_data:/opt/emqx/data
+      - emqx_log:/opt/emqx/log
+
+volumes:
+  pgdata:
+  grafana-storage:
+  emqx_data:
+  emqx_log:
+
+
+networks:
+  dash-iot-network:
+

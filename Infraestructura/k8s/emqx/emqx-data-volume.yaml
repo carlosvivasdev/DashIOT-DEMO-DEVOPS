@@ -1,0 +1,31 @@
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: emqx-data-pv
+  labels:
+    volume: "emqx-data-pv"
+spec:
+  capacity:
+    storage: 100Mi
+  storageClassName: default
+  accessModes:
+    - ReadWriteOnce
+  hostPath:
+    path: /var/data # Se guarda el volumen dentro del nodo
+
+---
+
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: emqx-data-pvc
+spec:
+  accessModes:
+    - ReadWriteOnce
+  storageClassName: default
+  resources:
+    requests:
+      storage: 100Mi
+  selector:
+    matchLabels:
+      volume: "emqx-data-pv"
